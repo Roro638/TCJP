@@ -1,0 +1,491 @@
+# -*- coding: mbcs -*-
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.openStep('/home/s2239369/Downloads/ScaledOxfordTurbine (1).stp', 
+    scaleFromFile=OFF)
+mdb.models['Model-1'].PartFromGeometryFile(combine=False, dimensionality=
+    THREE_D, geometryFile=mdb.acis, name='Turbine Blade', type=DEFORMABLE_BODY)
+mdb.openStep('/home/s2239369/SMT_Tenon.stp', scaleFromFile=OFF)
+mdb.models['Model-1'].PartFromGeometryFile(combine=False, dimensionality=
+    THREE_D, geometryFile=mdb.acis, name='SMT_Tenon', type=DEFORMABLE_BODY)
+del mdb.models['Model-1'].parts['SMT_Tenon']
+del mdb.models['Model-1'].parts['Turbine Blade']
+mdb.openStep('/home/s2239369/SMT_Tenon.stp', scaleFromFile=OFF)
+mdb.models['Model-1'].PartFromGeometryFile(combine=False, dimensionality=
+    THREE_D, geometryFile=mdb.acis, name='SMT_Tenon', type=DEFORMABLE_BODY)
+mdb.openStep('/home/s2239369/SMT_Mortise.stp', scaleFromFile=OFF)
+mdb.models['Model-1'].PartFromGeometryFile(combine=False, dimensionality=
+    THREE_D, geometryFile=mdb.acis, name='SMT_Mortise', type=DEFORMABLE_BODY)
+mdb.openStep('/home/s2239369/SMT_Adhesive.stp', scaleFromFile=OFF)
+mdb.models['Model-1'].PartFromGeometryFile(combine=False, dimensionality=
+    THREE_D, geometryFile=mdb.acis, name='SMT_Adhesive', type=DEFORMABLE_BODY)
+mdb.models['Model-1'].Material(name='Glass Fibre')
+mdb.models['Model-1'].materials['Glass Fibre'].Elastic(table=((100000.0, 0.28), 
+    ))
+mdb.models['Model-1'].Material(name='Epoxy Resin')
+mdb.models['Model-1'].materials['Epoxy Resin'].Elastic(table=((100000.0, 0.4), 
+    ))
+mdb.models['Model-1'].HomogeneousSolidSection(material='Glass Fibre', name=
+    'Section-1', thickness=None)
+mdb.models['Model-1'].parts['SMT_Mortise'].Set(cells=
+    mdb.models['Model-1'].parts['SMT_Mortise'].cells.getSequenceFromMask((
+    '[#1 ]', ), ), name='Mortise')
+mdb.models['Model-1'].parts['SMT_Mortise'].SectionAssignment(offset=0.0, 
+    offsetField='', offsetType=MIDDLE_SURFACE, region=
+    mdb.models['Model-1'].parts['SMT_Mortise'].sets['Mortise'], sectionName=
+    'Section-1', thicknessAssignment=FROM_SECTION)
+mdb.models['Model-1'].HomogeneousSolidSection(material='Epoxy Resin', name=
+    'Section-2', thickness=None)
+mdb.models['Model-1'].parts['SMT_Adhesive'].Set(cells=
+    mdb.models['Model-1'].parts['SMT_Adhesive'].cells.getSequenceFromMask((
+    '[#1 ]', ), ), name='Adhesive')
+mdb.models['Model-1'].parts['SMT_Adhesive'].SectionAssignment(offset=0.0, 
+    offsetField='', offsetType=MIDDLE_SURFACE, region=
+    mdb.models['Model-1'].parts['SMT_Adhesive'].sets['Adhesive'], sectionName=
+    'Section-2', thicknessAssignment=FROM_SECTION)
+mdb.models['Model-1'].HomogeneousSolidSection(material='Glass Fibre', name=
+    'Section-3', thickness=None)
+mdb.models['Model-1'].parts['SMT_Tenon'].Set(cells=
+    mdb.models['Model-1'].parts['SMT_Tenon'].cells.getSequenceFromMask((
+    '[#1 ]', ), ), name='Tenon')
+mdb.models['Model-1'].parts['SMT_Tenon'].SectionAssignment(offset=0.0, 
+    offsetField='', offsetType=MIDDLE_SURFACE, region=
+    mdb.models['Model-1'].parts['SMT_Tenon'].sets['Tenon'], sectionName=
+    'Section-3', thicknessAssignment=FROM_SECTION)
+# Save by s2239369 on 2024_10_15-10.46.09; build 2018 2017_11_07-17.21.41 127140
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].StaticStep(name='Step-1', nlgeom=ON, previous='Initial')
+mdb.models['Model-1'].rootAssembly.DatumCsysByDefault(CARTESIAN)
+mdb.models['Model-1'].rootAssembly.Instance(dependent=ON, name='SMT_Adhesive-1'
+    , part=mdb.models['Model-1'].parts['SMT_Adhesive'])
+mdb.models['Model-1'].rootAssembly.Instance(dependent=ON, name='SMT_Mortise-1', 
+    part=mdb.models['Model-1'].parts['SMT_Mortise'])
+mdb.models['Model-1'].rootAssembly.deleteFeatures(('SMT_Mortise-1', 
+    'SMT_Adhesive-1'))
+mdb.models['Model-1'].rootAssembly.Instance(dependent=ON, name='SMT_Mortise-1', 
+    part=mdb.models['Model-1'].parts['SMT_Mortise'])
+mdb.models['Model-1'].rootAssembly.Instance(dependent=ON, name='SMT_Tenon-1', 
+    part=mdb.models['Model-1'].parts['SMT_Tenon'])
+mdb.models['Model-1'].rootAssembly.instances['SMT_Tenon-1'].translate(vector=(
+    95.0, 0.0, 0.0))
+mdb.models['Model-1'].rootAssembly.Instance(dependent=ON, name='SMT_Adhesive-1'
+    , part=mdb.models['Model-1'].parts['SMT_Adhesive'])
+mdb.models['Model-1'].rootAssembly.instances['SMT_Adhesive-1'].translate(
+    vector=(222.8, 0.0, 0.0))
+mdb.models['Model-1'].rootAssembly.CoincidentPoint(fixedPoint=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Mortise-1'].vertices[15], 
+    movablePoint=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Adhesive-1'].vertices[22])
+mdb.models['Model-1'].rootAssembly.CoincidentPoint(fixedPoint=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Mortise-1'].vertices[13], 
+    movablePoint=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Adhesive-1'].vertices[20])
+del mdb.models['Model-1'].rootAssembly.features['Coincident Point-1']
+del mdb.models['Model-1'].rootAssembly.features['Coincident Point-2']
+mdb.models['Model-1'].rootAssembly.FaceToFace(clearance=0.0, fixedPlane=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Mortise-1'].faces[10], 
+    flip=OFF, movablePlane=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Adhesive-1'].faces[11])
+del mdb.models['Model-1'].rootAssembly.features['Face to Face-1']
+mdb.models['Model-1'].rootAssembly.CoincidentPoint(fixedPoint=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Mortise-1'].vertices[15], 
+    movablePoint=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Adhesive-1'].vertices[22])
+del mdb.models['Model-1'].rootAssembly.features['Coincident Point-1']
+mdb.models['Model-1'].rootAssembly.FaceToFace(clearance=0.0, fixedPlane=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Adhesive-1'].faces[11], 
+    flip=ON, movablePlane=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Mortise-1'].faces[10])
+del mdb.models['Model-1'].rootAssembly.features['Face to Face-1']
+mdb.models['Model-1'].rootAssembly.CoincidentPoint(fixedPoint=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Mortise-1'].vertices[6], 
+    movablePoint=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Adhesive-1'].vertices[22])
+del mdb.models['Model-1'].rootAssembly.features['Coincident Point-1']
+mdb.models['Model-1'].rootAssembly.FaceToFace(clearance=1.0, fixedPlane=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Adhesive-1'].faces[5], 
+    flip=OFF, movablePlane=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Tenon-1'].faces[10])
+del mdb.models['Model-1'].rootAssembly.features['Face to Face-1']
+mdb.models['Model-1'].rootAssembly.CoincidentPoint(fixedPoint=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Tenon-1'].InterestingPoint(
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Tenon-1'].edges[3], 
+    MIDDLE), movablePoint=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Adhesive-1'].InterestingPoint(
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Adhesive-1'].edges[0], 
+    MIDDLE))
+mdb.models['Model-1'].rootAssembly.CoincidentPoint(fixedPoint=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Adhesive-1'].InterestingPoint(
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Adhesive-1'].edges[17], 
+    MIDDLE), movablePoint=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Mortise-1'].InterestingPoint(
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Mortise-1'].edges[6], 
+    MIDDLE))
+del mdb.models['Model-1'].rootAssembly.features['Coincident Point-2']
+mdb.models['Model-1'].rootAssembly.CoincidentPoint(fixedPoint=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Adhesive-1'].InterestingPoint(
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Adhesive-1'].edges[30], 
+    MIDDLE), movablePoint=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Mortise-1'].InterestingPoint(
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Mortise-1'].edges[23], 
+    MIDDLE))
+del mdb.models['Model-1'].rootAssembly.features['Coincident Point-2']
+mdb.models['Model-1'].rootAssembly.FaceToFace(clearance=0.0, fixedPlane=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Adhesive-1'].faces[4], 
+    flip=OFF, movablePlane=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Mortise-1'].faces[6])
+del mdb.models['Model-1'].rootAssembly.features['Face to Face-1']
+mdb.models['Model-1'].rootAssembly.ParallelFace(fixedPlane=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Adhesive-1'].faces[12], 
+    flip=OFF, movablePlane=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Mortise-1'].faces[6])
+del mdb.models['Model-1'].rootAssembly.features['Parallel Face-1']
+mdb.models['Model-1'].rootAssembly.CoincidentPoint(fixedPoint=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Adhesive-1'].vertices[14]
+    , movablePoint=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Mortise-1'].vertices[4])
+mdb.models['Model-1'].rootAssembly.CoincidentPoint(fixedPoint=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Mortise-1'].vertices[15], 
+    movablePoint=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Adhesive-1'].vertices[22])
+#* FeatureError: The constraint cannot be applied because it conflicts 
+#* with existing position constraints.
+del mdb.models['Model-1'].rootAssembly.features['Coincident Point-2']
+mdb.models['Model-1'].rootAssembly.rotate(angle=90.0, axisDirection=(0.0, 1.0, 
+    0.0), axisPoint=(0.0, 1.0, 0.0), instanceList=('SMT_Mortise-1', ))
+mdb.models['Model-1'].rootAssembly.rotate(angle=90.0, axisDirection=(0.0, 1.0, 
+    0.0), axisPoint=(0.0, 1.0, 0.0), instanceList=('SMT_Mortise-1', ))
+mdb.models['Model-1'].rootAssembly.CoincidentPoint(fixedPoint=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Adhesive-1'].vertices[16]
+    , movablePoint=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Mortise-1'].vertices[6])
+# Save by s2239369 on 2024_10_15-11.19.52; build 2018 2017_11_07-17.21.41 127140
+# Save by s2239369 on 2024_10_15-11.22.55; build 2018 2017_11_07-17.21.41 127140
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].ContactProperty('IntProp-1')
+mdb.models['Model-1'].interactionProperties['IntProp-1'].CohesiveBehavior(
+    defaultPenalties=OFF, table=((1000.0, 1000.0, 1000.0), ))
+mdb.models['Model-1'].interactionProperties['IntProp-1'].Damage(evolTable=((
+    11.0, ), ), evolutionType=ENERGY, initTable=((65.0, 65.0, 65.0), ), 
+    useEvolution=ON)
+# Save by s2239369 on 2024_10_15-11.36.08; build 2018 2017_11_07-17.21.41 127140
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].rootAssembly.Surface(name='m_Surf-1', side1Faces=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Tenon-1'].faces.getSequenceFromMask(
+    ('[#741 ]', ), ))
+mdb.models['Model-1'].rootAssembly.Surface(name='s_Surf-1', side1Faces=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Adhesive-1'].faces.getSequenceFromMask(
+    ('[#37 ]', ), ))
+mdb.models['Model-1'].SurfaceToSurfaceContactStd(adjustMethod=NONE, 
+    clearanceRegion=None, createStepName='Step-1', datumAxis=None, 
+    initialClearance=OMIT, interactionProperty='IntProp-1', master=
+    mdb.models['Model-1'].rootAssembly.surfaces['m_Surf-1'], name='Int-1', 
+    slave=mdb.models['Model-1'].rootAssembly.surfaces['s_Surf-1'], sliding=
+    FINITE, thickness=ON)
+mdb.models['Model-1'].rootAssembly.Surface(name='m_Surf-3', side1Faces=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Adhesive-1'].faces.getSequenceFromMask(
+    ('[#fc00 ]', ), ))
+mdb.models['Model-1'].rootAssembly.Surface(name='s_Surf-3', side1Faces=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Mortise-1'].faces.getSequenceFromMask(
+    ('[#7c2 ]', ), ))
+mdb.models['Model-1'].SurfaceToSurfaceContactStd(adjustMethod=NONE, 
+    clearanceRegion=None, createStepName='Step-1', datumAxis=None, 
+    initialClearance=OMIT, interactionProperty='IntProp-1', master=
+    mdb.models['Model-1'].rootAssembly.surfaces['m_Surf-3'], name='Int-2', 
+    slave=mdb.models['Model-1'].rootAssembly.surfaces['s_Surf-3'], sliding=
+    FINITE, thickness=ON)
+# Save by s2239369 on 2024_10_15-11.49.21; build 2018 2017_11_07-17.21.41 127140
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.models['Model-1'].rootAssembly.Set(faces=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Tenon-1'].faces.getSequenceFromMask(
+    ('[#3e ]', ), ), name='Set-1')
+mdb.models['Model-1'].EncastreBC(createStepName='Step-1', localCsys=None, name=
+    'BC-1', region=mdb.models['Model-1'].rootAssembly.sets['Set-1'])
+mdb.models['Model-1'].rootAssembly.Surface(name='Surf-5', side1Faces=
+    mdb.models['Model-1'].rootAssembly.instances['SMT_Mortise-1'].faces.getSequenceFromMask(
+    ('[#8 ]', ), ))
+mdb.models['Model-1'].Pressure(amplitude=UNSET, createStepName='Step-1', 
+    distributionType=UNIFORM, field='', magnitude=-50000.0, name='Load-1', 
+    region=mdb.models['Model-1'].rootAssembly.surfaces['Surf-5'])
+mdb.Job(atTime=None, contactPrint=OFF, description='', echoPrint=OFF, 
+    explicitPrecision=SINGLE, getMemoryFromAnalysis=True, historyPrint=OFF, 
+    memory=90, memoryUnits=PERCENTAGE, model='Model-1', modelPrint=OFF, 
+    multiprocessingMode=DEFAULT, name='Mortise_tenon_adhesive', 
+    nodalOutputPrecision=SINGLE, numCpus=1, numGPUs=0, queue=None, 
+    resultsFormat=ODB, scratch='', type=ANALYSIS, userSubroutine='', waitHours=
+    0, waitMinutes=0)
+mdb.models['Model-1'].parts['SMT_Adhesive'].seedPart(deviationFactor=0.1, 
+    minSizeFactor=0.1, size=7.9)
+mdb.models['Model-1'].parts['SMT_Adhesive'].setElementType(elemTypes=(ElemType(
+    elemCode=C3D8R, elemLibrary=STANDARD, secondOrderAccuracy=OFF, 
+    kinematicSplit=AVERAGE_STRAIN, hourglassControl=DEFAULT, 
+    distortionControl=DEFAULT), ElemType(elemCode=C3D6, elemLibrary=STANDARD), 
+    ElemType(elemCode=C3D4, elemLibrary=STANDARD)), regions=(
+    mdb.models['Model-1'].parts['SMT_Adhesive'].cells.getSequenceFromMask((
+    '[#1 ]', ), ), ))
+mdb.models['Model-1'].parts['SMT_Tenon'].seedPart(deviationFactor=0.1, 
+    minSizeFactor=0.1, size=15.0)
+mdb.models['Model-1'].parts['SMT_Tenon'].setMeshControls(elemShape=TET, 
+    regions=mdb.models['Model-1'].parts['SMT_Tenon'].cells.getSequenceFromMask(
+    ('[#1 ]', ), ), technique=FREE)
+mdb.models['Model-1'].parts['SMT_Tenon'].setElementType(elemTypes=(ElemType(
+    elemCode=C3D20R, elemLibrary=STANDARD), ElemType(elemCode=C3D15, 
+    elemLibrary=STANDARD), ElemType(elemCode=C3D10, elemLibrary=STANDARD)), 
+    regions=(
+    mdb.models['Model-1'].parts['SMT_Tenon'].cells.getSequenceFromMask((
+    '[#1 ]', ), ), ))
+mdb.models['Model-1'].parts['SMT_Adhesive'].setMeshControls(elemShape=TET, 
+    regions=
+    mdb.models['Model-1'].parts['SMT_Adhesive'].cells.getSequenceFromMask((
+    '[#1 ]', ), ), technique=FREE)
+mdb.models['Model-1'].parts['SMT_Adhesive'].setElementType(elemTypes=(ElemType(
+    elemCode=C3D20R, elemLibrary=STANDARD), ElemType(elemCode=C3D15, 
+    elemLibrary=STANDARD), ElemType(elemCode=C3D10, elemLibrary=STANDARD)), 
+    regions=(
+    mdb.models['Model-1'].parts['SMT_Adhesive'].cells.getSequenceFromMask((
+    '[#1 ]', ), ), ))
+mdb.models['Model-1'].parts['SMT_Adhesive'].generateMesh()
+mdb.models['Model-1'].parts['SMT_Mortise'].setMeshControls(elemShape=TET, 
+    regions=
+    mdb.models['Model-1'].parts['SMT_Mortise'].cells.getSequenceFromMask((
+    '[#1 ]', ), ), technique=FREE)
+mdb.models['Model-1'].parts['SMT_Mortise'].setElementType(elemTypes=(ElemType(
+    elemCode=C3D20R, elemLibrary=STANDARD), ElemType(elemCode=C3D15, 
+    elemLibrary=STANDARD), ElemType(elemCode=C3D10, elemLibrary=STANDARD)), 
+    regions=(
+    mdb.models['Model-1'].parts['SMT_Mortise'].cells.getSequenceFromMask((
+    '[#1 ]', ), ), ))
+mdb.models['Model-1'].parts['SMT_Mortise'].seedPart(deviationFactor=0.1, 
+    minSizeFactor=0.1, size=16.0)
+mdb.models['Model-1'].parts['SMT_Mortise'].generateMesh()
+mdb.models['Model-1'].parts['SMT_Tenon'].generateMesh()
+mdb.models['Model-1'].rootAssembly.regenerate()
+mdb.jobs['Mortise_tenon_adhesive'].submit(consistencyChecking=OFF)
+# Save by s2239369 on 2024_10_15-11.55.04; build 2018 2017_11_07-17.21.41 127140
+from part import *
+from material import *
+from section import *
+from assembly import *
+from step import *
+from interaction import *
+from load import *
+from mesh import *
+from optimization import *
+from job import *
+from sketch import *
+from visualization import *
+from connectorBehavior import *
+mdb.jobs['Mortise_tenon_adhesive']._Message(STARTED, {'phase': BATCHPRE_PHASE, 
+    'clientHost': 'tlf59.see.ed.ac.uk', 'handle': 0, 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(ERROR, {'phase': BATCHPRE_PHASE, 
+    'message': 'SURFACE-BASED COHESIVE BEHAVIOR CANNOT BE USED WITH FINITE-SLIDING, SURFACE-TO-SURFACE CONTACT PAIRS.', 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(ABORTED, {'phase': BATCHPRE_PHASE, 
+    'message': 'Analysis phase failed due to errors', 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(ERROR, {
+    'message': 'Analysis Input File Processor exited with an error.', 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(JOB_ABORTED, {
+    'message': 'Analysis Input File Processor exited with an error.', 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.models['Model-1'].interactions['Int-1'].setValues(adjustMethod=NONE, 
+    bondingSet=None, enforcement=SURFACE_TO_SURFACE, initialClearance=OMIT, 
+    sliding=SMALL, supplementaryContact=SELECTIVE, thickness=ON)
+mdb.models['Model-1'].interactions['Int-2'].setValues(adjustMethod=NONE, 
+    bondingSet=None, enforcement=SURFACE_TO_SURFACE, initialClearance=OMIT, 
+    sliding=SMALL, supplementaryContact=SELECTIVE, thickness=ON)
+mdb.jobs['Mortise_tenon_adhesive'].submit(consistencyChecking=OFF)
+mdb.jobs['Mortise_tenon_adhesive']._Message(STARTED, {'phase': BATCHPRE_PHASE, 
+    'clientHost': 'tlf59.see.ed.ac.uk', 'handle': 0, 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(WARNING, {'phase': BATCHPRE_PHASE, 
+    'message': 'PLEASE MAKE SURE THAT THE MESH DENSITY OF THE SLAVE SURFACE IN THE CONTACT PAIR (ASSEMBLY_S_SURF-3,ASSEMBLY_M_SURF-3) IS FINER THAN THE MASTER SURFACE.  THE ANALYSIS MAY RUN SLOWER, MAY YIELD INACCURATE RESULTS, AND MAY REQUIRE MORE MEMORY IF THIS IS NOT THE CASE.', 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(WARNING, {'phase': BATCHPRE_PHASE, 
+    'message': '48 elements are distorted. Either the isoparametric angles are out of the suggested limits or the triangular or tetrahedral quality measure is bad. The elements have been identified in element set WarnElemDistorted.', 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(ODB_FILE, {'phase': BATCHPRE_PHASE, 
+    'file': '/home/s2239369/Mortise_tenon_adhesive.odb', 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(COMPLETED, {
+    'phase': BATCHPRE_PHASE, 'message': 'Analysis phase complete', 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(STARTED, {'phase': STANDARD_PHASE, 
+    'clientHost': 'tlf59.see.ed.ac.uk', 'handle': 0, 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(STEP, {'phase': STANDARD_PHASE, 
+    'stepId': 1, 'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(ODB_FRAME, {
+    'phase': STANDARD_PHASE, 'step': 0, 'frame': 0, 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(MEMORY_ESTIMATE, {
+    'phase': STANDARD_PHASE, 'jobName': 'Mortise_tenon_adhesive', 
+    'memory': 598.0})
+mdb.jobs['Mortise_tenon_adhesive']._Message(PHYSICAL_MEMORY, {
+    'phase': STANDARD_PHASE, 'physical_memory': 31744.0, 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(MINIMUM_MEMORY, {
+    'minimum_memory': 117.0, 'phase': STANDARD_PHASE, 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(WARNING, {'phase': STANDARD_PHASE, 
+    'message': 'EXCESSIVE DISTORTION AT A TOTAL OF 732 INTEGRATION POINTS IN SOLID (CONTINUUM) ELEMENTS', 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(STATUS, {'totalTime': 0.0, 
+    'attempts': ' 1U', 'timeIncrement': 1.0, 'increment': 1, 'stepTime': 0.0, 
+    'step': 1, 'jobName': 'Mortise_tenon_adhesive', 'severe': 1, 
+    'iterations': 1, 'phase': STANDARD_PHASE, 'equilibrium': 0})
+mdb.jobs['Mortise_tenon_adhesive']._Message(WARNING, {'phase': STANDARD_PHASE, 
+    'message': 'EXCESSIVE DISTORTION AT A TOTAL OF 7 INTEGRATION POINTS IN SOLID (CONTINUUM) ELEMENTS', 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(STATUS, {'totalTime': 0.0, 
+    'attempts': ' 2U', 'timeIncrement': 0.25, 'increment': 1, 'stepTime': 0.0, 
+    'step': 1, 'jobName': 'Mortise_tenon_adhesive', 'severe': 2, 
+    'iterations': 2, 'phase': STANDARD_PHASE, 'equilibrium': 0})
+mdb.jobs['Mortise_tenon_adhesive']._Message(WARNING, {'phase': STANDARD_PHASE, 
+    'message': 'EXCESSIVE DISTORTION AT A TOTAL OF 2532 INTEGRATION POINTS IN SOLID (CONTINUUM) ELEMENTS', 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(STATUS, {'totalTime': 0.0, 
+    'attempts': ' 3U', 'timeIncrement': 0.0625, 'increment': 1, 
+    'stepTime': 0.0, 'step': 1, 'jobName': 'Mortise_tenon_adhesive', 
+    'severe': 3, 'iterations': 3, 'phase': STANDARD_PHASE, 'equilibrium': 0})
+mdb.jobs['Mortise_tenon_adhesive']._Message(WARNING, {'phase': STANDARD_PHASE, 
+    'message': 'EXCESSIVE DISTORTION AT A TOTAL OF 18 INTEGRATION POINTS IN SOLID (CONTINUUM) ELEMENTS', 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(STATUS, {'totalTime': 0.0, 
+    'attempts': ' 4U', 'timeIncrement': 0.015625, 'increment': 1, 
+    'stepTime': 0.0, 'step': 1, 'jobName': 'Mortise_tenon_adhesive', 
+    'severe': 3, 'iterations': 3, 'phase': STANDARD_PHASE, 'equilibrium': 0})
+mdb.jobs['Mortise_tenon_adhesive']._Message(STATUS, {'totalTime': 0.0, 
+    'attempts': ' 5U', 'timeIncrement': 0.00390625, 'increment': 1, 
+    'stepTime': 0.0, 'step': 1, 'jobName': 'Mortise_tenon_adhesive', 
+    'severe': 3, 'iterations': 3, 'phase': STANDARD_PHASE, 'equilibrium': 0})
+mdb.jobs['Mortise_tenon_adhesive']._Message(ERROR, {'phase': STANDARD_PHASE, 
+    'message': 'Too many attempts made for this increment', 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(ABORTED, {'phase': STANDARD_PHASE, 
+    'message': 'Analysis phase failed due to errors', 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(ERROR, {
+    'message': 'Abaqus/Standard Analysis exited with an error - Please see the  message file for possible error messages if the file exists.', 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(JOB_ABORTED, {
+    'message': 'Abaqus/Standard Analysis exited with an error - Please see the  message file for possible error messages if the file exists.', 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.models['Model-1'].parts['SMT_Mortise'].deleteMesh()
+mdb.models['Model-1'].parts['SMT_Mortise'].seedPart(deviationFactor=0.1, 
+    minSizeFactor=0.1, size=5.0)
+mdb.models['Model-1'].parts['SMT_Mortise'].generateMesh()
+mdb.models['Model-1'].rootAssembly.regenerate()
+mdb.jobs['Mortise_tenon_adhesive'].submit(consistencyChecking=OFF)
+mdb.jobs['Mortise_tenon_adhesive']._Message(STARTED, {'phase': BATCHPRE_PHASE, 
+    'clientHost': 'tlf59.see.ed.ac.uk', 'handle': 0, 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(WARNING, {'phase': BATCHPRE_PHASE, 
+    'message': '48 elements are distorted. Either the isoparametric angles are out of the suggested limits or the triangular or tetrahedral quality measure is bad. The elements have been identified in element set WarnElemDistorted.', 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(ODB_FILE, {'phase': BATCHPRE_PHASE, 
+    'file': '/home/s2239369/Mortise_tenon_adhesive.odb', 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(COMPLETED, {
+    'phase': BATCHPRE_PHASE, 'message': 'Analysis phase complete', 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(STARTED, {'phase': STANDARD_PHASE, 
+    'clientHost': 'tlf59.see.ed.ac.uk', 'handle': 0, 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(STEP, {'phase': STANDARD_PHASE, 
+    'stepId': 1, 'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(ODB_FRAME, {
+    'phase': STANDARD_PHASE, 'step': 0, 'frame': 0, 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(MEMORY_ESTIMATE, {
+    'phase': STANDARD_PHASE, 'jobName': 'Mortise_tenon_adhesive', 
+    'memory': 4685.0})
+mdb.jobs['Mortise_tenon_adhesive']._Message(PHYSICAL_MEMORY, {
+    'phase': STANDARD_PHASE, 'physical_memory': 31744.0, 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(MINIMUM_MEMORY, {
+    'minimum_memory': 631.0, 'phase': STANDARD_PHASE, 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(WARNING, {'phase': STANDARD_PHASE, 
+    'message': 'EXCESSIVE DISTORTION AT A TOTAL OF 26242 INTEGRATION POINTS IN SOLID (CONTINUUM) ELEMENTS', 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(STATUS, {'totalTime': 0.0, 
+    'attempts': ' 1U', 'timeIncrement': 1.0, 'increment': 1, 'stepTime': 0.0, 
+    'step': 1, 'jobName': 'Mortise_tenon_adhesive', 'severe': 1, 
+    'iterations': 1, 'phase': STANDARD_PHASE, 'equilibrium': 0})
+mdb.jobs['Mortise_tenon_adhesive']._Message(WARNING, {'phase': STANDARD_PHASE, 
+    'message': 'EXCESSIVE DISTORTION AT A TOTAL OF 20557 INTEGRATION POINTS IN SOLID (CONTINUUM) ELEMENTS', 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(STATUS, {'totalTime': 0.0, 
+    'attempts': ' 2U', 'timeIncrement': 0.25, 'increment': 1, 'stepTime': 0.0, 
+    'step': 1, 'jobName': 'Mortise_tenon_adhesive', 'severe': 2, 
+    'iterations': 2, 'phase': STANDARD_PHASE, 'equilibrium': 0})
+mdb.jobs['Mortise_tenon_adhesive']._Message(WARNING, {'phase': STANDARD_PHASE, 
+    'message': 'EXCESSIVE DISTORTION AT A TOTAL OF 1469 INTEGRATION POINTS IN SOLID (CONTINUUM) ELEMENTS', 
+    'jobName': 'Mortise_tenon_adhesive'})
+mdb.jobs['Mortise_tenon_adhesive']._Message(STATUS, {'totalTime': 0.0, 
+    'attempts': ' 3U', 'timeIncrement': 0.0625, 'increment': 1, 
+    'stepTime': 0.0, 'step': 1, 'jobName': 'Mortise_tenon_adhesive', 
+    'severe': 3, 'iterations': 3, 'phase': STANDARD_PHASE, 'equilibrium': 0})
+# Save by s2239369 on 2024_10_15-12.07.08; build 2018 2017_11_07-17.21.41 127140
